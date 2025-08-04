@@ -1,5 +1,5 @@
 # Password Reset Form
-A form to help users reset their password, built with React and TypeScript.
+A password reset form built with React and TypeScript. This form is part of the reset process after a user clicks 'Forgotten Password', submits their email to verify their account, and follows the link sent to their email."
 
 ## This project will include the following: 
 - User to confirm new password by entering it twice
