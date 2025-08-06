@@ -19,7 +19,13 @@ function App() {
   const [errors, setErrors] = useState<string[]>([])
 
   //create state for success
-  const [isSuccessful, setIsSuccessful] = useState(false)
+  const [isSuccessful, setIsSuccessful] = useState<boolean>(false)
+
+  //password visibility state
+  const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
+
+  //types
+  const [type, setType] = useState('password')
 
   //capture values from each input field
   const captureInputValues = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +34,16 @@ function App() {
       ...prev,
       [name]: value
     }))
+  }
+
+  const handleVisbility = () => {
+    if (type === 'password') {
+      setType('text')
+      setPasswordVisibility(true)
+    } else {
+      setType('password')
+      setPasswordVisibility(false)
+    }
   }
 
   const validatePassword = (password: string) => {
@@ -77,7 +93,6 @@ function App() {
     }
 
     setIsSuccessful(true)
-
   }
 
   return (
@@ -86,11 +101,16 @@ function App() {
       {isSuccessful && <p>You have successfuly updated your password</p>}
       {!isSuccessful && <form id="password-form" onSubmit={handleSubmit}>
         <fieldset>
-          <label htmlFor="password">New password*</label>
-          <input type="password" name="password" id="password" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
+          <label className="password-label" htmlFor="password">New password*</label>
+          <input type={type} name="password" id="password" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
 
-          <label htmlFor="confirmedPassword">Confirm new password*</label>
-          <input type="password" name="confirmedPassword" id="confirmedPassword" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
+          <label htmlFor="confirmedPassword" className="password-label">Confirm new password*</label>
+          <input type={type} name="confirmedPassword" id="confirmedPassword" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
+        </fieldset>
+        <fieldset className="show-pass-section">
+          {!passwordVisibility && <label htmlFor="show-password">Show password</label>}
+          {passwordVisibility && <label htmlFor="show-password">Hide password</label>}
+          <input type="checkbox" id="show-password" name="show-password" onChange={handleVisbility} />
         </fieldset>
         {errors.length <= 0 &&
           <div className="req-section" id="password-requirements" aria-live="polite">
@@ -112,7 +132,6 @@ function App() {
             </ul>
           </div>
         }
-
         <button type="submit" >Reset Password</button>
       </form >}
     </>
