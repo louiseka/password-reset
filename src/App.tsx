@@ -10,7 +10,7 @@ function App() {
   }
 
   //create state for formdata
-  const [formData, setFormData] = useState<(PasswordFormData)>({
+  const [formData, setFormData] = useState<PasswordFormData>({
     password: '',
     confirmedPassword: ''
   })
