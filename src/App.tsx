@@ -16,7 +16,7 @@ function App() {
   })
 
   //create state for error
-  const [error, setError] = useState('')
+  const [errors, setErrors] = useState<string[]>([])
 
   //capture values from each input field
   const captureInputValues = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,24 +28,81 @@ function App() {
     console.log(formData)
   }
 
-  //add onSubmit to form
-  //prevent form submit default
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    console.log("Form submitted, your password is:", formData.password)
+  const validatePassword = (password: string) => {
+    console.log(password)
+    if (password.length < 8) {
+      setErrors(prev => ([
+        ...prev,
+        "Your password must be at least 8 characters long."
+      ])
+      )
+    }
+
+    //testing lowercase
+    if (!/[a-z]/.test(password)) {
+      setErrors(prev => ([
+        ...prev,
+        "Your password must include at least 1 lowercase character."
+      ])
+      )
+    }
+
+    //testing uppercase
+    if (!/[A-Z]/.test(password)) {
+      setErrors(prev => ([
+        ...prev,
+        "Your password must include at least 1 uppercase character."
+      ])
+      )
+    }
+    //testing number
+    if (!/\d/.test(password)) {
+      setErrors(prev => ([
+        ...prev,
+        "Your password must include at least 1 number"
+      ])
+      )
+    }
+
+    //testing special characters
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
+      setErrors(prev => ([
+        ...prev,
+        "Your password must include at least 1 special character"
+      ]))
+    }
   }
 
 
+  //add onSubmit to form
+  //prevent form submit default
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    validatePassword(formData.password)
+    //if no show error message
+    if (formData.password !== formData.confirmedPassword) {
+      setErrors(prev => ([
+        ...prev,
+        "Your password does not match. Try again"
+      ])
+      )
+      return
+    }
+    console.log(errors)
+    if (errors.length > 0) {
+      return
+    }
+    // setErrors([])
+    console.log("You have successfully updated your password.")
 
-  //are the values the exact same
-  //if yes form can be submitted with thank you message
-  //if no show error message
 
-  //a function to check if password passes 
-  // at least 8 characters, 
-  // contain upper and lowercase, 
-  // contain at least 1 number, 
-  // and at least 1 special character
+
+    //are the values the exact same
+    //if yes form can be submitted with thank you message
+
+  }
+
+  console.log('update')
 
   return (
     <>
@@ -68,6 +125,7 @@ function App() {
             <li>Must contain at least one special character (e.g., ! @ # $ %)</li>
           </ul>
         </div>
+        {errors.length > 0 && <p>{errors}</p>}
 
         <button type="submit" >Reset Password</button>
       </form>
