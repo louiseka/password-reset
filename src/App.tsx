@@ -1,13 +1,8 @@
 import "./index.css"
 import { useState } from "react"
+import type { PasswordFormData } from "./types"
 
 function App() {
-
-  //create an Object Type for the password data
-  type PasswordFormData = {
-    password: string,
-    confirmedPassword: string
-  }
 
   //create state for formdata
   const [formData, setFormData] = useState<PasswordFormData>({
@@ -24,9 +19,6 @@ function App() {
   //password visibility state
   const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false)
 
-  //types
-  const [type, setType] = useState('password')
-
   //capture values from each input field
   const captureInputValues = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -37,13 +29,7 @@ function App() {
   }
 
   const handleVisbility = () => {
-    if (type === 'password') {
-      setType('text')
-      setPasswordVisibility(true)
-    } else {
-      setType('password')
-      setPasswordVisibility(false)
-    }
+    setPasswordVisibility(prev => !prev)
   }
 
   const validatePassword = (password: string) => {
@@ -102,14 +88,14 @@ function App() {
       {!isSuccessful && <form id="password-form" onSubmit={handleSubmit}>
         <fieldset>
           <label className="password-label" htmlFor="password">New password*</label>
-          <input type={type} name="password" id="password" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
+          <input type={passwordVisibility ? 'text' : 'password'} name="password" id="password" autoComplete="new-password" required aria-describedby={errors.length > 0 ? "error-messages" : "password-requirements"} onChange={captureInputValues}></input>
 
           <label htmlFor="confirmedPassword" className="password-label">Confirm new password*</label>
-          <input type={type} name="confirmedPassword" id="confirmedPassword" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
+          <input type={passwordVisibility ? 'text' : 'password'} name="confirmedPassword" id="confirmedPassword" autoComplete="new-password" required aria-describedby={errors.length > 0 ? "error-messages" : "password-requirements"} onChange={captureInputValues}></input>
         </fieldset>
         <fieldset className="show-pass-section">
-          {!passwordVisibility && <label htmlFor="show-password">Show password</label>}
-          {passwordVisibility && <label htmlFor="show-password">Hide password</label>}
+          <label htmlFor="show-password">{passwordVisibility ? "Hide password" : "Show password"}</label>
+
           <input type="checkbox" id="show-password" name="show-password" onChange={handleVisbility} />
         </fieldset>
         {errors.length <= 0 &&
@@ -123,11 +109,11 @@ function App() {
             </ul>
           </div>}
         {errors.length > 0 &&
-          <div className="req-section">
+          <div className="req-section" id="error-messages">
             <p>Sorry your password is not valid because of the following reasons: </p>
             <ul>
-              {errors.map((error) =>
-                <li key={error}>{error}</li>
+              {errors.map((error, index) =>
+                <li key={index}>{error}</li>
               )}
             </ul>
           </div>
