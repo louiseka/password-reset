@@ -18,6 +18,9 @@ function App() {
   //create state for error
   const [errors, setErrors] = useState<string[]>([])
 
+  //create state for success
+  const [isSuccessful, setIsSuccessful] = useState(false)
+
   //capture values from each input field
   const captureInputValues = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -69,45 +72,49 @@ function App() {
     }
     setErrors(newErrors)
 
-    console.log(errors)
     if (newErrors.length > 0) {
       return
     }
-    // setErrors([])
 
-
-    console.log("You have successfuly updated your password")
-
-    //are the values the exact same
-    //if yes form can be submitted with thank you message
+    setIsSuccessful(true)
 
   }
 
   return (
     <>
       <h1> Reset Password</h1>
-
-      <form id="password-form" onSubmit={handleSubmit}>
+      {isSuccessful && <p>You have successfuly updated your password</p>}
+      {!isSuccessful && <form id="password-form" onSubmit={handleSubmit}>
         <fieldset>
-          <label htmlFor="password">New password</label>
-          <input type="password" name="password" id="password" aria-describedby="password-requirements" onChange={captureInputValues}></input>
+          <label htmlFor="password">New password*</label>
+          <input type="password" name="password" id="password" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
 
-          <label htmlFor="confirmedPassword">Confirm new password</label>
-          <input type="password" name="confirmedPassword" id="confirmedPassword" aria-describedby="password-requirements" onChange={captureInputValues}></input>
+          <label htmlFor="confirmedPassword">Confirm new password*</label>
+          <input type="password" name="confirmedPassword" id="confirmedPassword" autoComplete="password" required aria-describedby="password-requirements" onChange={captureInputValues}></input>
         </fieldset>
-        <div className="req-section" id="password-requirements" aria-live="polite">
-          <p>Password requirements:</p>
-          <ul>
-            <li>At least 8 characters long</li>
-            <li>Must include both uppercase and lowercase letters</li>
-            <li>Must contain at least one number</li>
-            <li>Must contain at least one special character (e.g., ! @ # $ %)</li>
-          </ul>
-        </div>
-        {errors.length > 0 && <p>{errors}</p>}
+        {errors.length <= 0 &&
+          <div className="req-section" id="password-requirements" aria-live="polite">
+            <p>Password requirements:</p>
+            <ul>
+              <li>At least 8 characters long</li>
+              <li>Must include both uppercase and lowercase letters</li>
+              <li>Must contain at least one number</li>
+              <li>Must contain at least one special character (e.g., ! @ # $ %)</li>
+            </ul>
+          </div>}
+        {errors.length > 0 &&
+          <div className="req-section">
+            <p>Sorry your password is not valid because of the following reasons: </p>
+            <ul>
+              {errors.map((error) =>
+                <li key={error}>{error}</li>
+              )}
+            </ul>
+          </div>
+        }
 
         <button type="submit" >Reset Password</button>
-      </form>
+      </form >}
     </>
   )
 }
