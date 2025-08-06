@@ -29,6 +29,12 @@ p {
   text-align: left;
 }
 
+.sm-red-text {
+  font-size: 0.8rem;
+  padding: 0 0.4em;
+  color: #c30f16;
+}
+
 /* Form */
 
 form {
