@@ -25,52 +25,36 @@ function App() {
       ...prev,
       [name]: value
     }))
-    console.log(formData)
   }
 
   const validatePassword = (password: string) => {
-    console.log(password)
+    const errors = []
+
     if (password.length < 8) {
-      setErrors(prev => ([
-        ...prev,
-        "Your password must be at least 8 characters long."
-      ])
-      )
+      errors.push("Your password must be at least 8 characters long.")
     }
 
     //testing lowercase
     if (!/[a-z]/.test(password)) {
-      setErrors(prev => ([
-        ...prev,
-        "Your password must include at least 1 lowercase character."
-      ])
-      )
+      errors.push("Your password must include at least 1 lowercase character.")
     }
 
     //testing uppercase
     if (!/[A-Z]/.test(password)) {
-      setErrors(prev => ([
-        ...prev,
-        "Your password must include at least 1 uppercase character."
-      ])
-      )
+      errors.push("Your password must include at least 1 uppercase character.")
     }
+
     //testing number
     if (!/\d/.test(password)) {
-      setErrors(prev => ([
-        ...prev,
-        "Your password must include at least 1 number"
-      ])
-      )
+      errors.push("Your password must include at least 1 number")
     }
 
     //testing special characters
     if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) {
-      setErrors(prev => ([
-        ...prev,
-        "Your password must include at least 1 special character"
-      ]))
+      errors.push("Your password must include at least 1 special character")
     }
+
+    return errors
   }
 
 
@@ -78,31 +62,26 @@ function App() {
   //prevent form submit default
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    validatePassword(formData.password)
+    const newErrors = validatePassword(formData.password)
     //if no show error message
     if (formData.password !== formData.confirmedPassword) {
-      setErrors(prev => ([
-        ...prev,
-        "Your password does not match. Try again"
-      ])
-      )
-      return
+      newErrors.push("Your password does not match. Try again.")
     }
+    setErrors(newErrors)
+
     console.log(errors)
-    if (errors.length > 0) {
+    if (newErrors.length > 0) {
       return
     }
     // setErrors([])
-    console.log("You have successfully updated your password.")
 
 
+    console.log("You have successfuly updated your password")
 
     //are the values the exact same
     //if yes form can be submitted with thank you message
 
   }
-
-  console.log('update')
 
   return (
     <>
