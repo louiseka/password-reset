@@ -74,7 +74,7 @@ function App() {
     <>
       <h1> Reset Password</h1>
       {isSuccessful &&
-        <p>You have successfuly updated your password</p>
+        <p className="success-message">You have successfuly updated your password</p>
       }
       {!isSuccessful &&
         <form id="password-form" onSubmit={handleSubmit}>
@@ -101,7 +101,7 @@ function App() {
           </fieldset>
 
           <fieldset className="show-pass-section">
-            <label htmlFor="show-password">{passwordVisibility ? "Hide password" : "Show password"}</label>
+            <label htmlFor="show-password">Show password</label>
             <input type="checkbox" id="show-password" name="show-password" onChange={handleVisbility} />
           </fieldset>
 
@@ -118,7 +118,7 @@ function App() {
           }
           {errors.length > 0 &&
             <div className="req-section" id="error-messages">
-              <p>Sorry your password is not valid because of the following reasons: </p>
+              <p>Sorry, your password is not valid for the following reasons: </p>
               <ul>
                 {errors.map((error, index) =>
                   <li key={index}>{error}</li>
