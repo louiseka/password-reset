@@ -35,6 +35,10 @@ p {
   color: #c30f16;
 }
 
+.success-message {
+  text-align: center;
+}
+
 /* Form */
 
 form {
